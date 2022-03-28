@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <h4><a href="{% url 'auctions:new listing' %}">New Listing</a></h4>
+    TODO
+    <ul>
+    {% for listing in listings %}
+    <div class="list-item">
+        {% if listing.image %}
+            <img class="listing_image" src={{listing.image.url}} alt="{{listing.image.title}}">
+        {% endif %}
+        <h6><a href="{% url 'auctions:listing' listing.pk %}">{{ listing.title }}</a></h6>
+    </div>
+    {% empty %}
+     <li>There are no listings available at this time...</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
