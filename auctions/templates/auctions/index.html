@@ -12,6 +12,7 @@
             <img class="listing_image" src={{listing.image.url}} alt="{{listing.image.title}}">
         {% endif %}
         <h6><a href="{% url 'auctions:listing' listing.pk %}">{{ listing.title }}</a></h6>
+        <a href="{% url 'auctions:add_watch' listing.pk %}">Add to watchlist</a>
     </div>
     {% empty %}
      <li>There are no listings available at this time...</li>

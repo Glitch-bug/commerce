@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import User, Listing
+from .models import User, Listing, WatchList
 
 
 def index(request):
@@ -79,3 +79,8 @@ def new_listing(request):
 def listing(request, pk):
     listing = Listing.objects.get(pk=pk)
     return render(request, 'auctions/listing.html', {'listing': listing})
+
+def watchlist(request, pk):
+    listing = Listing.objects.get(pk=pk)
+    watchlist = WatchList(owner=request.user, listing=listing)
+    return redirect('auctions:index')

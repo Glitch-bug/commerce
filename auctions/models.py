@@ -26,3 +26,8 @@ class Bid(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.IntegerField()
     date_added = models.DateTimeField(auto_now_add=True)
+
+class WatchList(models.Model):
+    #TODO: Owner foreign key should not be cascade throughout 
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    listing = models.ManyToManyField(Listing)
