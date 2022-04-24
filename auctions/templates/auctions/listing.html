@@ -5,8 +5,16 @@
     {% if listing.image %}
         <img class="listing_image" src="{{listing.image.url}}" alt="{{listing.title}}">
     {% endif %}
-    <p>minimum bid: GH¢{{listing.min_bid}}.00</p>
+    <p>minimum bid: GH¢{{listing.cur_bid.amount}}.00</p>
+    <p>bid leader: {{listing.cur_bid.owner}}</p>
     <p>listed by: {{ listing.owner }}</p>
     <p>listed on: {{listing.date_added}}</p>
     <p>{{listing.description}}</p>
+    <form action="{% url 'auctions:bid' listing.pk %}" method="POST">
+        {% csrf_token %}
+        <p>Place a bid
+        <input type="number" name="new_bid">
+        <input type="submit">
+        </p>
+    </form>
 {% endblock %}

@@ -5,11 +5,16 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+class Bid(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
 class Listing(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True)
     image = models.ImageField(null=True, blank=True)
-    min_bid = models.IntegerField(default=0)
+    cur_bid = models.OneToOneField(Bid, on_delete=models.PROTECT)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -22,12 +27,8 @@ class Comment(models.Model):
     text = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
 
-class Bid(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.IntegerField()
-    date_added = models.DateTimeField(auto_now_add=True)
 
 class WatchList(models.Model):
     #TODO: Owner foreign key should not be cascade throughout 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    listing = models.ManyToManyField(Listing)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
