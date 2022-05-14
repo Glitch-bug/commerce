@@ -16,7 +16,7 @@
         <h6><a href="{% url 'auctions:listing' listing.pk %}">{{ listing.title }}</a></h6>
         {% if request.user.is_authenticated %}
             <a href="{% url 'auctions:add_watch' listing.pk %}">Add to watchlist</a>
-            <a href="{% url 'auctions:bid' listing.pk">Bid</a>
+            <a href="{% url 'auctions:bid' listing.pk %}">Bid</a>
         {% endif %}
     </div>
     {% empty %}

@@ -1,8 +1,10 @@
 {% extends 'auctions/layout.html' %}
+{% load static %}
 {% block body %}
     <h2>{{ request.user}}'s Watchlist</h2>
     {% for item in watchlist %}
         <div class="watchlist-item">
+            <img src="{{item.listing.image.url}}">
             <a href="{% url 'auctions:listing' item.listing.pk%}">{{ item.listing.title }}</a>
         </div>
     {% empty %}

@@ -73,14 +73,15 @@ def new_listing(request):
         description = request.POST['description']
         min_bid = request.POST['min_bid']
         image = request.FILES.get('image')
+        # Create and save a new Listing
+        listing = Listing(owner=request.user, title=title, description=description, image=image)
+        listing.save()
 
         # Create and save a new Bid 
-        bid = Bid(owner=request.user, amount=min_bid)
+        bid = Bid(listing=listing, owner=request.user, amount=min_bid)
         bid.save()
         
-        # Create and save a new Listing
-        listing = Listing(owner=request.user, title=title, description=description, cur_bid=bid, image=image)
-        listing.save()
+        
         return redirect('auctions:index')
     else:
         return render(request, 'auctions/new_listing.html')
@@ -103,14 +104,17 @@ def watchlist(request):
     watchlist = WatchList.objects.filter(owner=request.user)
     return render(request, 'auctions/watchlist.html', {'watchlist':watchlist})
 
+# Looking good 
 def bid(request, pk):
     if request.method == "POST":
         listing = Listing.objects.get(pk=pk) 
-        bid = listing.cur_bid
+        bid = listing.cur_bid()
         new_bid = int(request.POST['new_bid'])
-        if new_bid > bid.amount:  
-            bid.amount = request.POST['new_bid']
-            bid.owner  = request.user
-            bid.date_added = timezone.now()
-            bid.save()
+        if bid:
+            if new_bid > bid.amount:  
+                new_bid = Bid(listing=listing, owner=request.user, amount=new_bid)
+                new_bid.save()
+        else:
+            new_bid = Bid(listing=listing, owner=request.user, amount=new_bid)
+            new_bid.save() 
     return redirect('auctions:listing', pk)
