@@ -95,9 +95,13 @@ def add_watchlist(request, pk):
     if WatchList.objects.filter(owner=request.user, listing=listing):
         #TODO: Add message to say duplication not allowed
         return redirect('auctions:index')
-    #TODO: Add message to say item added to watchlist
-    watchlist = WatchList(owner=request.user, listing=listing)
-    watchlist.save()
+    elif Watch.objects.get(owner=request.user):
+        watchlist = WatchList.objects.get(owner=request.user)
+        item = watctlist.listing_set.create(listing=listing)
+    else:
+        #TODO: Add message to say item added to watchlist
+        watchlist = WatchList(owner=request.user, listing=listing)
+        watchlist.save()
     return redirect('auctions:index')
 
 def watchlist(request):
@@ -118,3 +122,7 @@ def bid(request, pk):
             new_bid = Bid(listing=listing, owner=request.user, amount=new_bid)
             new_bid.save() 
     return redirect('auctions:listing', pk)
+
+def rem_watchlist(request, pk):
+    watch_listing = WatchList.objects.get(pk=pk)
+    pass

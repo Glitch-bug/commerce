@@ -29,6 +29,8 @@ class Listing(models.Model):
         else:
             return 0
     
+    def owner_titled(self):
+        return self.owner.username.title()
     #TODO: Create a recent bids on listing method later
     
 class Bid(models.Model):
@@ -46,6 +48,14 @@ class Comment(models.Model):
 
 
 class WatchList(models.Model):
-    #TODO: Owner foreign key should not be cascade throughout 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    #TODO: Owner foreign key should be a one to one so each owner has a single list
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    #TODO: Watchlist listing should be a many to many relationship so single watchlist can hold many listings and a single listing can be on many watchlists
+    # Remember to delete all old watchlist info
+    listing = models.ManyToManyField(Listing, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.owner.title()}'s Watchlist"
+
+    def owner_titled(self):
+        return self.owner.username.title()

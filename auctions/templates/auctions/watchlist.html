@@ -1,11 +1,15 @@
 {% extends 'auctions/layout.html' %}
 {% load static %}
-{% block body %}
-    <h2>{{ request.user}}'s Watchlist</h2>
+{% block body %}    
+    <link href="{% static 'auctions/CSS/watchlist.css' %}" rel="stylesheet">
+    <h2>{{watchlist.owner_titled}}'s Watchlist</h2>
     {% for item in watchlist %}
         <div class="watchlist-item">
-            <img src="{{item.listing.image.url}}">
+            {% if item.listing.image %}
+                <img src="{{item.listing.image.url}}">
+            {% endif %}
             <a href="{% url 'auctions:listing' item.listing.pk%}">{{ item.listing.title }}</a>
+            <a href="{% url 'auction:rem_watch' item.pk}">Remove from watchlist</a>
         </div>
     {% empty %}
         <p>No items have added to the watchlist currently...</p>
