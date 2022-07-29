@@ -3,13 +3,13 @@
 {% block body %}    
     <link href="{% static 'auctions/CSS/watchlist.css' %}" rel="stylesheet">
     <h2>{{watchlist.owner_titled}}'s Watchlist</h2>
-    {% for item in watchlist %}
+    {% for listing in listings %}
         <div class="watchlist-item">
-            {% if item.listing.image %}
-                <img src="{{item.listing.image.url}}">
+            {% if listing.image %}
+                <img src="{{listing.image.url}}">
             {% endif %}
-            <a href="{% url 'auctions:listing' item.listing.pk%}">{{ item.listing.title }}</a>
-            <a href="{% url 'auction:rem_watch' item.pk}">Remove from watchlist</a>
+            <a href="{% url 'auctions:listing' listing.pk %}">{{ listing.title }}</a>
+            <a href="{% url 'auctions:rem_watch' listing.pk %}">Remove from watchlist</a>
         </div>
     {% empty %}
         <p>No items have added to the watchlist currently...</p>

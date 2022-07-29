@@ -9,6 +9,17 @@
     <p>bid leader: {{listing.cur_bid.owner}}</p>
     <p>listed by: {{ listing.owner }}</p>
     <p>listed on: {{listing.date_added}}</p>
+    {% if request.user == listing.owner and listing.status %}
+        <a href="{% url 'auctions:close' listing.pk %}">Close</a>
+    {% elif not listing.status and request.user == listing.owner and request.user == listing.cur_bid.owner %}
+        Your listing was not purchased!
+    {% elif not listing.status and request.user == listing.cur_bid.owner %}
+        You won this auction! This item is now your property
+    {% elif not listing.status and request.user == listing.owner %}
+        Congratulations your listing was purchased by {{ listing.cur_bid.owner }} for GH¢{{ listing.cur_bid.amount }}
+    {% else %}
+        This listing is still active place a bid to make it yours!
+    {% endif %}
     <p>{{listing.description}}</p>
     <form action="{% url 'auctions:bid' listing.pk %}" method="POST">
         {% csrf_token %}

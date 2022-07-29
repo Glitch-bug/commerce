@@ -9,7 +9,7 @@ from .models import User, Listing, WatchList, Bid
 
 
 def index(request):
-    listings = Listing.objects.all()
+    listings = Listing.objects.filter(status=True)
     print(listings)
     context = {'listings': listings}
     return render(request, "auctions/index.html", context)
@@ -74,7 +74,7 @@ def new_listing(request):
         min_bid = request.POST['min_bid']
         image = request.FILES.get('image')
         # Create and save a new Listing
-        listing = Listing(owner=request.user, title=title, description=description, image=image)
+        listing = Listing(owner=request.user, title=title, description=description, image=image, status=True)
         listing.save()
 
         # Create and save a new Bid 
@@ -90,23 +90,32 @@ def listing(request, pk):
     listing = Listing.objects.get(pk=pk)
     return render(request, 'auctions/listing.html', {'listing': listing})
 
+def close_listing(request, pk):
+    listing = Listing.objects.get(pk=pk)
+    listing.status = False
+    listing.save()
+    return redirect('auctions:listing', pk)
+
 def add_watchlist(request, pk):
     listing = Listing.objects.get(pk=pk)
     if WatchList.objects.filter(owner=request.user, listing=listing):
         #TODO: Add message to say duplication not allowed
         return redirect('auctions:index')
-    elif Watch.objects.get(owner=request.user):
+    elif WatchList.objects.all().filter(owner=request.user):
         watchlist = WatchList.objects.get(owner=request.user)
-        item = watctlist.listing_set.create(listing=listing)
+        watchlist.listing.add(listing)
+        watchlist.save()
     else:
         #TODO: Add message to say item added to watchlist
-        watchlist = WatchList(owner=request.user, listing=listing)
+        watchlist = WatchList(owner=request.user)
+        watchlist.listing.add(listing)
         watchlist.save()
     return redirect('auctions:index')
 
 def watchlist(request):
-    watchlist = WatchList.objects.filter(owner=request.user)
-    return render(request, 'auctions/watchlist.html', {'watchlist':watchlist})
+    watchlist = WatchList.objects.get(owner=request.user)
+    listings = watchlist.listing.all()
+    return render(request, 'auctions/watchlist.html', {'watchlist':watchlist, 'listings':listings})
 
 # Looking good 
 def bid(request, pk):
@@ -123,6 +132,10 @@ def bid(request, pk):
             new_bid.save() 
     return redirect('auctions:listing', pk)
 
+
 def rem_watchlist(request, pk):
-    watch_listing = WatchList.objects.get(pk=pk)
-    pass
+    watchlist = WatchList.objects.get(owner=request.user)
+    listing = watchlist.listing.get(pk=pk)
+    watchlist.listing.remove(listing)
+    watchlist.save()
+    return redirect('auctions:watchlist')

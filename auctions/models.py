@@ -11,6 +11,9 @@ class Listing(models.Model):
     description = models.TextField(null=True)
     image = models.ImageField(null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.BooleanField()
+    Categories = models.TextChoices('categories', 'Toy Accessory Appliance')
+    category = models.CharField(max_length=255, choices=Categories.choices)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -44,6 +47,8 @@ class Bid(models.Model):
 class Comment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    replies_to = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
 
@@ -52,10 +57,10 @@ class WatchList(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     #TODO: Watchlist listing should be a many to many relationship so single watchlist can hold many listings and a single listing can be on many watchlists
     # Remember to delete all old watchlist info
-    listing = models.ManyToManyField(Listing, null=True, blank=True)
+    listing = models.ManyToManyField(Listing, blank=True)
 
     def __str__(self):
-        return f"{self.owner.title()}'s Watchlist"
+        return f"{self.owner.username.title()}'s Watchlist"
 
     def owner_titled(self):
         return self.owner.username.title()
