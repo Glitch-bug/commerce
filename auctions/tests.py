@@ -3,7 +3,7 @@ import datetime
 from django.test import TestCase, Client
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Listing, User
+from .models import Listing, User, WatchList
 
 def create_listing(title, days, pk, user, status):
     user = user
@@ -55,11 +55,12 @@ class WatchListModelTest(TestCase):
         except ObjectDoesNotExist:
             pass
     
-    # def test_first_watchlist(self):
-    #     login = self.client.login(username='testusers', password='123456')
-    #     listing = create_listing('hey', 0, 5, self.user, status=True)
+    def test_first_watchlist(self):
+        login = self.client.login(username='testusers', password='123456')
+        item = create_listing('hey', 0, 5, self.user, status=True)
 
-    #     watchlist = WatchList(owner=self.user)
-    #     watchlist.listing.add(listing)
-    #     self.assertEqual(list(self.user.li.all()), [listing]
+        watchlist = WatchList(owner=self.user)
+        watchlist.save()
+        watchlist.listing.add(item)
+        self.assertEqual(list(watchlist.listing.all()), [item])
         

@@ -53,10 +53,9 @@ class Comment(models.Model):
 
 
 class WatchList(models.Model):
-    #TODO: Owner foreign key should be a one to one so each owner has a single list
+    # Owner foreign key should be a one to one so each owner has a single list
     owner = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    #TODO: Watchlist listing should be a many to many relationship so single watchlist can hold many listings and a single listing can be on many watchlists
-    # Remember to delete all old watchlist info
+    # Watchlist listing should be a many to many relationship so single watchlist can hold many listings and a single listing can be on many watchlists
     listing = models.ManyToManyField(Listing, blank=True)
 
     def __str__(self):

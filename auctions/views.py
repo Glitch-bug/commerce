@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import User, Listing, WatchList, Bid
 
@@ -113,9 +114,14 @@ def add_watchlist(request, pk):
     return redirect('auctions:index')
 
 def watchlist(request):
-    watchlist = WatchList.objects.get(owner=request.user)
-    listings = watchlist.listing.all()
-    return render(request, 'auctions/watchlist.html', {'watchlist':watchlist, 'listings':listings})
+    try:
+        watchlist = WatchList.objects.get(owner=request.user)
+        listings = watchlist.listing.all()
+        return render(request, 'auctions/watchlist.html', {'watchlist':watchlist, 'listings':listings})
+    except ObjectDoesNotExist:
+        watchlist = WatchList(owner=request.user)
+        watchlist.save()
+        return render(request, 'auctions/watchlist.html', {'watchlist':watchlist})
 
 # Looking good 
 def bid(request, pk):
