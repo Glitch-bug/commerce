@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>{{category}}</h2>
+    {% for listing in listings %} 
+        <div class="list-item">
+            {% if listing.image %}
+                <img class="listing_image" src={{listing.image.url}} alt="{{listing.image.title}}">
+            {% endif %}
+            <h6 class="right"><a href="{% url 'auctions:listing' listing.pk %}">{{ listing.title }}</a></h6>
+            <hr class="right">
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'auctions:add_watch' listing.pk %}"class="right" >Add to watchlist</a>
+                <a href="{% url 'auctions:bid' listing.pk %}"class="right" >Bid</a>
+            {% endif %}
+        </div>
+    {% empty %}
+        <li>There are no listings available at this time...</li>
+    {% endfor %}
+
+{% endblock %}
