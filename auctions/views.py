@@ -11,8 +11,7 @@ from .models import User, Listing, WatchList, Bid
 
 def index(request):
     listings = Listing.objects.filter(status=True)
-    print(listings)
-    context = {'listings': listings}
+    context = {'listings': listings, 'home':'home'}
     return render(request, "auctions/index.html", context)
 
 
@@ -67,6 +66,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+
 def new_listing(request):
     if request.method == 'POST':
         # assign form answers to variables
@@ -74,8 +74,9 @@ def new_listing(request):
         description = request.POST['description']
         min_bid = request.POST['min_bid']
         image = request.FILES.get('image')
+        category = request.POST['category']
         # Create and save a new Listing
-        listing = Listing(owner=request.user, title=title, description=description, image=image, status=True)
+        listing = Listing(owner=request.user, title=title, description=description, image=image, category=category, status=True)
         listing.save()
 
         # Create and save a new Bid 
@@ -85,17 +86,28 @@ def new_listing(request):
         
         return redirect('auctions:index')
     else:
-        return render(request, 'auctions/new_listing.html')
+        categories = Listing.Categories
+        return render(request, 'auctions/new_listing.html', {"categories": categories})
+
 
 def listing(request, pk):
     listing = Listing.objects.get(pk=pk)
     return render(request, 'auctions/listing.html', {'listing': listing})
+
 
 def close_listing(request, pk):
     listing = Listing.objects.get(pk=pk)
     listing.status = False
     listing.save()
     return redirect('auctions:listing', pk)
+
+
+def edit_listing(request, pk):
+    if request.method == "POST":
+        pass 
+    else:
+        return render(request, 'auctions/edit_listing.html')
+
 
 def add_watchlist(request, pk):
     listing = Listing.objects.get(pk=pk)
@@ -113,6 +125,7 @@ def add_watchlist(request, pk):
         watchlist.save()
     return redirect('auctions:index')
 
+
 def watchlist(request):
     try:
         watchlist = WatchList.objects.get(owner=request.user)
@@ -122,6 +135,7 @@ def watchlist(request):
         watchlist = WatchList(owner=request.user)
         watchlist.save()
         return render(request, 'auctions/watchlist.html', {'watchlist':watchlist})
+
 
 # Looking good 
 def bid(request, pk):
@@ -145,3 +159,16 @@ def rem_watchlist(request, pk):
     watchlist.listing.remove(listing)
     watchlist.save()
     return redirect('auctions:watchlist')
+
+
+def categories(request):
+    categories = Listing.Categories
+    context = {'categories':categories}
+    return render(request, 'auctions/categories.html', context)
+
+
+def category(request, category):
+    listings = Listing.objects.filter(category=category)
+    context = {'listings':listings, 'category':category}
+    return render(request, 'auctions/category.html', context)
+

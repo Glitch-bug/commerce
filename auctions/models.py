@@ -1,3 +1,4 @@
+#TODO: Finish work on making page for individual categories
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -12,7 +13,7 @@ class Listing(models.Model):
     image = models.ImageField(null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.BooleanField()
-    Categories = models.TextChoices('categories', 'Toy Accessory Appliance')
+    Categories = models.TextChoices('categories', 'Toys Accessorys Appliances Organisms')
     category = models.CharField(max_length=255, choices=Categories.choices)
     date_added = models.DateTimeField(auto_now_add=True)
 

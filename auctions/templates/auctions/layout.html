@@ -6,6 +6,11 @@
         <title>{% block title %}Auctions{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'auctions/CSS/styles.css' %}" rel="stylesheet">
+        {% if home %}
+        <link href="{% static 'auctions/CSS/index.css' %}" rel="stylesheet">
+        {% elif listing %}
+            <link href="{% static 'auctions/CSS/listing.css' %}" rel="stylesheet">
+        {% endif %}
     </head>
     <body>
         <h1>Auctions</h1>
@@ -20,6 +25,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'auctions:index' %}">Active Listings</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'auctions:categories' %}">Categories</a>  
+            </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'auctions:logout' %}">Log Out</a>
@@ -33,7 +41,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'auctions:register' %}">Register</a>
+
                 </li>
+                
             {% endif %}
         </ul>
         <hr>

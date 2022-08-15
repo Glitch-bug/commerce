@@ -4,11 +4,21 @@
 <h2>Create New Listing</h2>
 <form action="{% url 'auctions:new listing' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <input name="title" autofocus type="text" placeholder="Listing Title" required>
+    <label for="title">Title</label>
+    <input name="title" autofocus type="text" placeholder="Something cool" required>
+    <label for="description">Description</label>
     <textarea name="description" placeholder="Provide a short description of your listing" required></textarea>
+    <label for="min_bid">Minimum Bid</label>
     <input name="min_bid" type="number" required>
     <!-- TODO: need to check on submitting images -->
+    <label for="image">Image</label>
     <input name="image" type="file">
+    <label for="category">Category</label>
+    <select name="category">
+        {% for category in categories %}
+            <option value="{{category}}">{{category}}</option>
+        {% endfor %}
+    </select>
     <input type="submit" value="Post">
 </form>
 

@@ -1,3 +1,4 @@
+#TODO: Create a view test
 import datetime
 
 from django.test import TestCase, Client
@@ -32,17 +33,38 @@ class ListingModelTests(TestCase):
         listing = create_listing('hey', 0, 5, self.user, status=True)
         amount = 1
         bid = listing.bid_set.create(owner=listing.owner, amount=amount, date_added = timezone.now())
-        listing = Listing.objects.get(pk=listing.id)  # needed to recall listing object after bid made for recent results
+        listing.save()
+        bid.save()
         self.assertEqual(listing.cur_bid(), bid)
-        
-
+    
+    def test_cur_bid_mult_bids(self):
+        """
+        Tests that highest bid is current bid when many bids have been made
+        """
+        login = self.client.login(username='testusers', password='123456')
+        listing = create_listing('hey', 0, 5, self.user, status=True)
+        bids = []
+        for i in range(5):
+            bid = listing.bid_set.create(owner=listing.owner, amount=i, date_added = timezone.now())
+            bids.append(bid)
+            bid.save()
+        listing.save()
+        self.assertEqual(listing.cur_bid(), bids[4])
 
 # class BidModelTests(TestCase):
-    # def test_
+#      def setUp(self):
+#         self.user = User.objects.create_user(username='testusers', password='123456')
+
+#     def test_no_bid
+
+
+
 
 class WatchListModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testusers', password='123456')
+        self.user.save()
+
 
     def test_no_watchlist(self):
         """
@@ -55,12 +77,25 @@ class WatchListModelTest(TestCase):
         except ObjectDoesNotExist:
             pass
     
+
     def test_first_watchlist(self):
         login = self.client.login(username='testusers', password='123456')
         item = create_listing('hey', 0, 5, self.user, status=True)
-
         watchlist = WatchList(owner=self.user)
         watchlist.save()
         watchlist.listing.add(item)
         self.assertEqual(list(watchlist.listing.all()), [item])
-        
+    
+    
+    def test_create_two_watchlists_for_one_user(self):
+        """
+        Tests to ensure two or more watchlists cannote be made for the same user
+        """
+        login = self.client.login(username='testusers', password='123456')
+        item = create_listing('hey', 0, 5, self.user, status=True)
+        watchlist = WatchList(owner=self.user)
+        watchlist.listing.add(item)
+        watchlist.save()
+        watchlist2 = WatchList(owner=self.user)
+        watchlist2.save()
+        self.assertEqual(watchlist, watchlist2)
