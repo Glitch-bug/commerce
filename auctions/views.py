@@ -168,7 +168,18 @@ def categories(request):
 
 
 def category(request, category):
-    listings = Listing.objects.filter(category=category)
+    listings = Listing.objects.filter(category=category, status=True)
     context = {'listings':listings, 'category':category}
     return render(request, 'auctions/category.html', context)
 
+
+def terminate_listing(request, pk):
+    listing = Listing.objects.get(pk=pk)
+    context = {"listing":listing, 'state':'listing'}
+    return render(request, 'auctions/terminate.html', context)
+
+def terminate(request, pk, state):
+    if state == 'listing':
+        listing = Listing.objects.get(pk=pk)
+        listing.delete()
+        return redirect('auctions:index')

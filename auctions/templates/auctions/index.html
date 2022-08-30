@@ -13,15 +13,17 @@
         {% if listing.image %}
             <img class="listing_image" src={{listing.image.url}} alt="{{listing.image.title}}">
         {% endif %}
-        <h6 class="right"><a href="{% url 'auctions:listing' listing.pk %}">{{ listing.title }}</a></h6>
-        <hr class="right">
-        {% if request.user.is_authenticated %}
-            <a href="{% url 'auctions:add_watch' listing.pk %}"class="right" >Add to watchlist</a>
-            <a href="{% url 'auctions:bid' listing.pk %}"class="right" >Bid</a>
-        {% endif %}
+        <div class="list-info">
+            <h6 class="right"><a class="right" href="{% url 'auctions:listing' listing.pk %}">{{ listing.title }}</a></h6>
+            <hr class="under">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary" href="{% url 'auctions:add_watch' listing.pk %}"class="right" >Add to watchlist</a>
+                <a class="btn btn-primary" href="{% url 'auctions:bid' listing.pk %}"class="right" >Bid</a>
+            {% endif %}
+        </div>
     </div>
     {% empty %}
-     <li>There are no listings available at this time...</li>
+        <li>There are no listings available at this time...</li>
     {% endfor %}
     </ul>
 {% endblock %}

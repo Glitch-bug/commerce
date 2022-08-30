@@ -11,7 +11,7 @@
     <p>listed on: {{listing.date_added}}</p>
     <p>category: {{listing.category}}</p>
     {% if request.user == listing.owner and listing.status %}
-        <a class="btn btn-primary" href="{% url 'auctions:close' listing.pk %}">Close</a> <a class="btn edit" href="{% url 'auctions:edit_listing' listing.pk %}">Edit</a>
+        <a class="btn btn-primary" href="{% url 'auctions:close' listing.pk %}">Close</a> <a class="btn edit" href="{% url 'auctions:edit_listing' listing.pk %}">Edit</a> <a class="btn terminate" href="{% url 'auctions:terminate_listing' listing.pk %}">Terminate</a>
     {% elif not listing.status and request.user == listing.owner and request.user == listing.cur_bid.owner %}
         <p class="status">Your listing was not purchased!</p>
     {% elif not listing.status and request.user == listing.cur_bid.owner %}

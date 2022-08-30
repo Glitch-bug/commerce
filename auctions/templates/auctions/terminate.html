@@ -1,0 +1,15 @@
+{% extends 'auctions/layout.html' %} 
+{% load static %} 
+
+{% block body %} 
+    {% if listing %}
+        <h2>Are you sure you want to terminate this {{state}}? If you do this you will not recieve any money</h2>
+        <p>Listing: {{listing.title}}</p>
+        <a class="btn terminate" href="{% url 'auctions:terminate' listing.pk state %}"></a> Yes</a> 
+        <a class="btn">No</a>
+    {% else %}
+        <h2>Are you sure you want to delete this {{state}}?</h2>
+        <a class="btn terminate" href="{% url 'auction:terminate' 2 state ">Yes</a> 
+        <a class="btn">No</a>
+    {% endif %}  
+{% endblock %}

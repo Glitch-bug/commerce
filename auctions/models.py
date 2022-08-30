@@ -38,7 +38,7 @@ class Listing(models.Model):
     #TODO: Create a recent bids on listing method later
     
 class Bid(models.Model):
-    listing = models.ForeignKey(Listing, on_delete=models.PROTECT)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.IntegerField()
     date_added = models.DateTimeField(auto_now_add=True)

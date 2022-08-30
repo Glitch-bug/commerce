@@ -6,3 +6,15 @@ body {
     max-width: 100px;
     max-height: 300px;
 }
+
+.right{
+    float:right;
+}
+
+.left{
+    float:left;
+}
+
+.under{
+    clear: right;
+}

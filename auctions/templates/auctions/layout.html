@@ -7,9 +7,11 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'auctions/CSS/styles.css' %}" rel="stylesheet">
         {% if home %}
-        <link href="{% static 'auctions/CSS/index.css' %}" rel="stylesheet">
+            <link href="{% static 'auctions/CSS/index.css' %}" rel="stylesheet">
         {% elif listing %}
             <link href="{% static 'auctions/CSS/listing.css' %}" rel="stylesheet">
+        {% elif category %}
+            <link href="{% static 'auctions/css/category.css' %}" rel="stylesheet">
         {% endif %}
     </head>
     <body>

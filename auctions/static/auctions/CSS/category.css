@@ -1,24 +1,19 @@
 .list-item{
     background-color: lightgrey;
-    margin-bottom: 5px;
     display: flex;
     flex-direction: row;
-    height: max-content;
+    margin-bottom: 5px;
 }
 
 .listing_image{
     width:300px;
     min-height: 100px;
     margin-right:5px;
-    display:inline;
-    margin:0;
+    /* height: 800px; */
 }
 
-.list-info{
-    width: 100%;
-}
+
 .list-item  hr {
     border: 3px solid blue;
+    width: 100%;
 }
-
-
