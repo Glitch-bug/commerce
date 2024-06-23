@@ -6,6 +6,11 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+class Categories(models.TextChoices):
+    TOYS = 'Toys', 'Toys'
+    ACCESSORIES = 'Accessories', 'Accessories'
+    APPLIANCES = 'Appliances', 'Appliances'
+    ORGANISMS = 'Organisms', 'Organisms'
 
 class Listing(models.Model):
     title = models.CharField(max_length=255)
@@ -13,7 +18,6 @@ class Listing(models.Model):
     image = models.ImageField(null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.BooleanField()
-    Categories = models.TextChoices('categories', 'Toys Accessorys Appliances Organisms')
     category = models.CharField(max_length=255, choices=Categories.choices)
     date_added = models.DateTimeField(auto_now_add=True)
 
